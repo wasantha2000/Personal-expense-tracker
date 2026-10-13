@@ -3,12 +3,14 @@ const cors = require('cors')
 require('dotenv').config()
 
 const pool = require('./src/config/db')
+const categoryRoutes = require('./src/config/routes/categoryRoutes')
 
 const app = express()
 const PORT = process.env.PORT || 5000
 
 app.use(cors())
 app.use(express.json())
+app.use('/api/categories', categoryRoutes)
 
 // Home route
 app.get('/', (req, res) => {
