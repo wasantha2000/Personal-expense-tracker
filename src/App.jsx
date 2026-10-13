@@ -1,122 +1,158 @@
 import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+const [expenses, setExpenses] = useState([])
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+const totalExpenses = expenses.reduce(
+(total, expense) => total + Number(expense.amount),
+0
+)
 
-      <div className="ticks"></div>
+const [title, setTitle] = useState('')
+const [amount, setAmount] = useState('')
+const [category, setCategory] = useState('Food')
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+function addExpense(event) {
+event.preventDefault()
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+```
+if (!title.trim() || !amount || Number(amount) <= 0) {
+  alert('Please enter a valid expense.')
+  return
+}
+
+const newExpense = {
+  id: Date.now(),
+  title: title.trim(),
+  amount: Number(amount),
+  category,
+}
+
+setExpenses((previousExpenses) => [...previousExpenses, newExpense])
+setTitle('')
+setAmount('')
+```
+
+}
+
+return ( <div className="app"> <aside className="sidebar"> <h2>Expense Tracker</h2> <p className="sidebar-label">MENU</p> <div className="nav-item active">Dashboard</div> <div className="nav-item">Transactions</div> <div className="nav-item">Categories</div> </aside>
+
+```
+  <main className="main-content">
+    <header className="page-header">
+      <div>
+        <h1>Dashboard</h1>
+        <p>Welcome back! Here is your financial overview.</p>
+      </div>
+      <span className="user-avatar">U</span>
+    </header>
+
+    <section className="summary-grid">
+      <div className="summary-card balance-card">
+        <p>Total Balance</p>
+        <h2>Rs. 0.00</h2>
+        <span>Your current balance</span>
+      </div>
+
+      <div className="summary-card">
+        <p>Total Income</p>
+        <h2>Rs. 0.00</h2>
+        <span className="positive">Income tracking coming soon</span>
+      </div>
+
+      <div className="summary-card">
+        <p>Total Expenses</p>
+        <h2>Rs. {totalExpenses.toLocaleString('en-LK', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}</h2>
+        <span>Based on expenses you add</span>
+      </div>
+    </section>
+
+    <section className="content-grid">
+      <div className="panel">
+        <h2>Add New Expense</h2>
+        <p className="panel-description">Record your daily spending.</p>
+
+        <form onSubmit={addExpense}>
+          <label htmlFor="title">Expense name</label>
+          <input
+            id="title"
+            type="text"
+            placeholder="e.g. Lunch"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+          />
+
+          <label htmlFor="amount">Amount (LKR)</label>
+          <input
+            id="amount"
+            type="number"
+            min="0.01"
+            step="0.01"
+            placeholder="e.g. 850"
+            value={amount}
+            onChange={(event) => setAmount(event.target.value)}
+          />
+
+          <label htmlFor="category">Category</label>
+          <select
+            id="category"
+            value={category}
+            onChange={(event) => setCategory(event.target.value)}
+          >
+            <option>Food</option>
+            <option>Transport</option>
+            <option>Education</option>
+            <option>Shopping</option>
+            <option>Bills</option>
+            <option>Other</option>
+          </select>
+
+          <button type="submit">+ Add Expense</button>
+        </form>
+      </div>
+
+      <div className="panel">
+        <h2>Recent Transactions</h2>
+        <p className="panel-description">Your latest expenses.</p>
+
+        {expenses.length === 0 ? (
+          <div className="empty-state">
+            <div className="empty-icon">₹</div>
+            <h3>No transactions yet</h3>
+            <p>Add your first expense using the form.</p>
+          </div>
+        ) : (
+          <div className="transaction-list">
+            {expenses.map((expense) => (
+              <div className="transaction" key={expense.id}>
+                <div className="transaction-icon">
+                  {expense.category.charAt(0)}
+                </div>
+                <div className="transaction-info">
+                  <strong>{expense.title}</strong>
+                  <span>{expense.category}</span>
+                </div>
+                <strong className="expense-amount">
+                  - Rs. {expense.amount.toLocaleString('en-LK', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </strong>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  </main>
+</div>
+
+
+)
 }
 
 export default App
