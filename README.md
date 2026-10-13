@@ -1,3 +1,20 @@
+# Local development
+
+The frontend and API run as separate processes. Configure `VITE_API_URL` in the
+root `.env` (use `http://localhost:5000` for local development) and configure
+`DATABASE_URL` and `JWT_SECRET` in `backend/.env`.
+
+Start both processes in separate terminals:
+
+```sh
+npm run dev
+npm --prefix backend run dev
+```
+
+The frontend cannot submit or load data unless the API is running and connected
+to the database. Apply `database/schema.sql` to your PostgreSQL database before
+using the app.
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

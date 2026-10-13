@@ -1,26 +1,25 @@
-
-const express = require("express");
-const pool = require("../db");
+import express from 'express';
+import pool from '../db.js';
 
 const router = express.Router();
 
 // Test category routes
-router.get("/test", (req, res) => {
+router.get('/test', (req, res) => {
   res.json({
     success: true,
-    message: "Category routes are working",
+    message: 'Category routes are working',
   });
 });
 
 // GET categories for a user
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const { user_id } = req.query;
 
-    if (!user_id || !/^\d+$/.test(user_id) || BigInt(user_id) <= 0n) {
+    if (!user_id || !/^\d+$/.test(String(user_id)) || BigInt(user_id) <= 0n) {
       return res.status(400).json({
         success: false,
-        message: "A valid user_id is required",
+        message: 'A valid user_id is required',
       });
     }
 
@@ -38,40 +37,40 @@ router.get("/", async (req, res) => {
       categories: result.rows,
     });
   } catch (error) {
-    console.error("Get categories error:", error.message);
+    console.error('Get categories error:', error.message);
     res.status(500).json({
       success: false,
-      message: "Failed to retrieve categories",
+      message: 'Failed to retrieve categories',
     });
   }
 });
 
 // POST a new category
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const { user_id, name, type } = req.body;
 
     if (!user_id || !/^\d+$/.test(String(user_id)) || BigInt(user_id) <= 0n) {
       return res.status(400).json({
         success: false,
-        message: "A valid user_id is required",
+        message: 'A valid user_id is required',
       });
     }
 
-    if (typeof name !== "string" || !name.trim()) {
+    if (typeof name !== 'string' || !name.trim()) {
       return res.status(400).json({
         success: false,
-        message: "Category name is required",
+        message: 'Category name is required',
       });
     }
 
     const normalizedType =
-      typeof type === "string" ? type.trim().toUpperCase() : "";
+      typeof type === 'string' ? type.trim().toUpperCase() : '';
 
-    if (!["INCOME", "EXPENSE"].includes(normalizedType)) {
+    if (!['INCOME', 'EXPENSE'].includes(normalizedType)) {
       return res.status(400).json({
         success: false,
-        message: "Type must be INCOME or EXPENSE",
+        message: 'Type must be INCOME or EXPENSE',
       });
     }
 
@@ -84,31 +83,31 @@ router.post("/", async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: "Category created successfully",
+      message: 'Category created successfully',
       category: result.rows[0],
     });
   } catch (error) {
-    console.error("Create category error:", error.message);
+    console.error('Create category error:', error.message);
 
-    if (error.code === "23503") {
+    if (error.code === '23503') {
       return res.status(400).json({
         success: false,
-        message: "The specified user does not exist",
+        message: 'The specified user does not exist',
       });
     }
 
-    if (error.code === "23505") {
+    if (error.code === '23505') {
       return res.status(409).json({
         success: false,
-        message: "This category already exists",
+        message: 'This category already exists',
       });
     }
 
     res.status(500).json({
       success: false,
-      message: "Failed to create category",
+      message: 'Failed to create category',
     });
   }
 });
 
-module.exports = router;
+export default router;
