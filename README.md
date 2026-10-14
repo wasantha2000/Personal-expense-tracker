@@ -1,8 +1,9 @@
 # Local development
 
-The frontend and API run as separate processes. Configure `VITE_API_URL` in the
-root `.env` (use `http://localhost:5000` for local development) and configure
-`DATABASE_URL` and `JWT_SECRET` in `backend/.env`.
+The frontend and API run as separate processes. During local development, leave
+`VITE_API_URL` unset in the root `.env`; Vite proxies `/api` requests to
+`http://localhost:5000`. For deployment, set `VITE_API_URL` to the deployed
+backend's base URL. Configure `DATABASE_URL` and `JWT_SECRET` in `backend/.env`.
 
 Start both processes in separate terminals:
 
